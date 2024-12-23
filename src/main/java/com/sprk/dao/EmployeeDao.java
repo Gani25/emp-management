@@ -2,6 +2,9 @@ package com.sprk.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -29,8 +32,52 @@ public class EmployeeDao {
 			ps.setDate(4, employee.getJoiningDate());
 			ps.setString(5, employee.getEmail());
 
-			return ps.executeUpdate();
+			int result = ps.executeUpdate();
+			closeAll(conn, ps, null);
+
+			return result;
 		
+	}
+
+	public List<Employee> getAllEmployees() throws Exception {
+		Connection conn = dataSource.getConnection();
+		String sql = "select * from employee";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		
+		ResultSet rs = ps.executeQuery();
+		
+		List<Employee> employees = new ArrayList<>();
+		while(rs.next()) {
+			Employee employee = new Employee();
+			employee.setEmpId(rs.getInt("emp_id"));
+			employee.setName(rs.getString("name"));
+			employee.setEmail(rs.getString("email"));
+			employee.setSalary(rs.getDouble("salary"));
+			employee.setGender(rs.getString("gender"));
+			employee.setCreatedAt(rs.getTimestamp("created_at"));
+			employee.setLastUpdate(rs.getTimestamp("last_update"));
+			employee.setJoiningDate(rs.getDate("joining_date"));
+			
+			employees.add(employee);
+		}
+		
+		closeAll(conn,ps,rs);
+		
+		return employees;
+		
+	}
+
+	private void closeAll(Connection conn, PreparedStatement ps, ResultSet rs) throws Exception {
+		// TODO Auto-generated method stu
+		if(conn!=null) {
+			conn.close();
+		}
+		if(rs!=null) {
+			rs.close();
+		}
+		if(ps!=null) {
+			ps.close();
+		}
 		
 	}
 	

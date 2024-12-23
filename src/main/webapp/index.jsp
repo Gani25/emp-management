@@ -21,8 +21,8 @@
 
 
 			<a type="button" class="btn btn-lg btn-secondary" href="add.jsp">Add Employee</a>
+			<a type="button" class="btn btn-lg btn-secondary" href="employee">List Employees</a>
 
-			<button type="button" class="btn btn-lg btn-secondary ">List Employees</button>
 
 		</div>
 

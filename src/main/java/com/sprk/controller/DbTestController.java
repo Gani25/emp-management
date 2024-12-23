@@ -34,7 +34,7 @@ public class DbTestController extends HttpServlet {
 			System.out.println(conn);
 
 		} catch (Exception e) {
-			// TODO: handle exception
+			// TODO:  handle exception
 			System.out.println(e);
 		}
 

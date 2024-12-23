@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -11,6 +12,7 @@ import com.sprk.dao.EmployeeDao;
 import com.sprk.model.Employee;
 
 import jakarta.annotation.Resource;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -39,6 +41,12 @@ public class ProcessFormController extends HttpServlet {
 		String salaryStr = req.getParameter("salary");
 		String joiningDateStr = req.getParameter("joiningDate");
 		String email = req.getParameter("email");
+		
+		if(name.isBlank()|| name == null) {
+			RequestDispatcher rd = req.getRequestDispatcher("add.jsp");
+			req.setAttribute("errMsg", "Name cannot be empty");
+			rd.forward(req, resp);
+		}
 
 		Date joiningDate = Date.valueOf(joiningDateStr);
         
@@ -47,14 +55,18 @@ public class ProcessFormController extends HttpServlet {
 
 		Employee employee = new Employee(name, gender, salary, joiningDate, email);
 
+		
 		try {
 			int result = employeeDao.addEmployee(employee);
 			if (result > 0) {
-				System.out.println("Insert Successfull");
+				session.setAttribute("successMsg", "Employee Saved Successfully!");
+//				System.out.println("Insert Successfull");
 			}else {
-				System.out.println("Something Bad happen");
+//				System.out.println("Something Bad happen");
+				session.setAttribute("errMsg", "Something Bad Happen!");
 				
 			}
+			resp.sendRedirect("employee");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,5 +76,20 @@ public class ProcessFormController extends HttpServlet {
 //
 //		resp.sendRedirect("dash.jsp");
 
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		try {
+			List<Employee> employees = employeeDao.getAllEmployees();
+			
+			req.setAttribute("employees", employees);
+			
+			req.getRequestDispatcher("/dashboard.jsp").forward(req, resp);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
