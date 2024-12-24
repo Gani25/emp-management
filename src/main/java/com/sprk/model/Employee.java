@@ -73,6 +73,12 @@ public class Employee {
 	public void setLastUpdate(Timestamp lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
+	@Override
+	public String toString() {
+		return "Employee [empId=" + empId + ", name=" + name + ", gender=" + gender + ", salary=" + salary
+				+ ", joiningDate=" + joiningDate + ", email=" + email + ", createdAt=" + createdAt + ", lastUpdate="
+				+ lastUpdate + "]";
+	}
     
     
 

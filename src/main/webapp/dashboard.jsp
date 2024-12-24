@@ -45,6 +45,7 @@
 					<th scope="col">Email</th>
 					<th scope="col">Created At</th>
 					<th scope="col">Last Update</th>
+					<th scope="col">Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -63,6 +64,18 @@
 						<td>${tempEmployee.email}</td>
 						<td>${tempEmployee.createdAt}</td>
 						<td>${tempEmployee.lastUpdate}</td>
+						<td>
+						<c:url var="deleteLink" value="employee/delete">
+						<c:param name="empId" value="${tempEmployee.empId}"/>
+						</c:url>
+						<a class="btn btn-sm btn-danger" href="${deleteLink}"><i class="fa-solid fa-trash"></i> Delete</a>
+						|
+						<c:url var="updateLink" value="employee/update">
+						<c:param name="empId" value="${tempEmployee.empId}"/>
+						</c:url>
+						<a class="btn btn-sm btn-outline-dark" href="${updateLink}"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+						
+						</td>
 					</tr>
 
 				</c:forEach>
